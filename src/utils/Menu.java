@@ -24,14 +24,48 @@ public class Menu {
         this.saveWhenCloseApp();
     }
 
+    public void run() {
+        Utils.clearConsole();
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\n===== MENU PRINCIPAL =====");
+            System.out.println("1. Cadastrar Professor");
+            System.out.println("2. Listar Professores");
+            System.out.println("3. Sair");
+            int option = Utils.readInt("Escolha uma opção: ", false);
+
+            switch (option) {
+                case 1:
+                    System.out.println("\nOpção selecionada: Cadastrar Professor");
+                    professorRegister();
+                    break;
+
+                case 2:
+                    System.out.println("\nOpção selecionada: Listar Professores");
+                    printAllProfessors();
+                    break;
+
+                case 3:
+                    System.out.println("\nSaindo do programa...");
+                    running = false;
+                    break;
+
+                default:
+                    Utils.clearConsole();
+                    System.out.println("\nOpção inválida. Tente novamente.");
+            }
+        }
+    }
+
     public void professorRegister() {
         try {
             Utils.clearConsole();
             System.out.println("Cadastro de Professor");
             String name = Utils.readString("Nome: ", true);
-            String cpf = Utils.readString("CPF: ", true);
+            String cpf = Utils.readCPF();
             String department = Utils.readString("Departamento: ", true);
-            Integer workingHours = Utils.readInt("Carga Horária: ");
+            Integer workingHours = Utils.readInt("Carga Horária: ", true);
             Long registration = Utils.readLong("Matrícula: ");
             Gender gender = Utils.readGender("Gênero: ");
             LocalDate birthDate = Utils.readLocalDate("Data de Nascimento: ");
@@ -56,6 +90,7 @@ public class Menu {
                                         subjects));
             System.out.println("Cadastro do professor realizado com sucesso!");
             Printer.printList.clear();
+            Utils.clearConsole();
         } catch (NoSuchElementException e) {
             System.out.println("\n\nEntrada interrompida. Programa Encerrado.");
         } catch (Exception e) {
@@ -64,6 +99,7 @@ public class Menu {
     }
 
     public void printAllProfessors() {
+        Utils.clearConsole();
         if(personsList.isEmpty()) {
             System.out.println("\nNão há funcionários cadastrados no sistema");
             return;

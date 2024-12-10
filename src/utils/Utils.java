@@ -15,22 +15,24 @@ public class Utils {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static int readInt(String message){
+    public static int readInt(String message, boolean addPrintList){
         int value;
         while (true) {
             System.out.print(message);
             if (scanner.hasNextInt()) {
                 value = scanner.nextInt();
-                if(!message.isEmpty()) Printer.printList.add(message + value);
                 scanner.nextLine();
                 break;
             } else {
-                clearConsole();
+                //clearConsole();
                 System.out.println("Valor inválido. Tente novamente.");
                 scanner.next();
             }
         }
-        Printer.print();
+        if(!message.isEmpty() && addPrintList){
+            Printer.printList.add(message + value);
+            Printer.print(true);
+        }
         return value;
     }
 
@@ -49,7 +51,7 @@ public class Utils {
                 scanner.next();
             }
         }
-        Printer.print();
+        Printer.print(true);
         return value;
     }
 
@@ -68,16 +70,36 @@ public class Utils {
                 scanner.next();
             }
         }
-        Printer.print();
+        Printer.print(true);
         return value;
     }
 
     public static String readString(String message, boolean addPrintList){
         System.out.print(message);
         String readedString = scanner.nextLine();
-        if(addPrintList) Printer.printList.add(message + readedString);
-        Printer.print();
+        if(addPrintList){
+            Printer.printList.add(message + readedString);
+            Printer.print(true);
+        }
         return readedString;
+    }
+
+    public static String readCPF() {
+        String cpf;
+        while (true) {
+            cpf = readString("CPF: ", false);
+            if(cpf.length() == 11 && cpf.matches("\\d+")){
+                Printer.printList.add("CPF: " + cpf.substring(0, 3) + "." +
+                                                cpf.substring(3, 6) + "." +
+                                                cpf.substring(6, 9) + "-" +
+                                                cpf.substring(9));
+                Printer.print(true);
+                break;
+            }
+            Printer.print(true);
+            System.out.println("CPF inválido. Tente novamente.\n");
+        }
+        return cpf;
     }
 
     public static Gender readGender(String message){
@@ -86,10 +108,10 @@ public class Utils {
             System.out.println("Digite o número correspondente ao genêro do funcionário:");
             System.out.print("1 - Masculino \n2 - Feminino\n3 - Outro\n");
             try {
-                int id = readInt("");
+                int id = readInt("", false);
                 Gender gender = Gender.fromId(id);
                 Printer.printList.add(message + gender.toString());
-                Printer.print();
+                Printer.print(true);
                 return gender;
             } catch (IllegalArgumentException e) {
                 clearConsole();
@@ -106,7 +128,7 @@ public class Utils {
             try {
                 LocalDate date = LocalDate.parse(input, formatter);
                 Printer.printList.add(message + input);
-                Printer.print();
+                Printer.print(true);
                 return date;
             } catch (DateTimeParseException e) {
                 System.out.println("Data inválida. Por favor, tente novamente.");
@@ -123,16 +145,16 @@ public class Utils {
             System.out.println("Disciplina ministrada: ");
             String subj = readString("", false);
             subjects.add(subj);
-            Printer.printList.add("- " + subj);
+            Printer.printList.add("    - " + subj);
 
-            Printer.print();
+            Printer.print(true);
             System.out.println("Deseja cadastrar mais uma disciplina? ");
             System.out.print("1 - Sim\n2 - Não\n");
 
-            value = readInt("");
+            value = readInt("", false);
             if(value == 2) break;
             if(value != 1){
-                Printer.print();
+                Printer.print(true);
                 System.out.println("\nValor inválido. Tente novamente");
             }
         }
@@ -144,9 +166,9 @@ public class Utils {
         String city = readString("Cidade: ", true);
         String neighborhood = readString("Bairro: ", true);
         String street = readString("Rua: ", true);
-        Integer number = readInt("Número: ");
+        Integer number = readInt("Número: ", true);
         String cep = readString("CEP: ", true);
-        Printer.print();
+        Printer.print(true);
         return new Address(street, number, neighborhood, city, cep);
     }
 
@@ -163,10 +185,10 @@ public class Utils {
                             "7 - VII\n" +
                             "8 - VIII\n");
             try {
-                int id = readInt("");
+                int id = readInt("", false);
                 Level level = Level.fromId(id);
                 Printer.printList.add(message + level.toString());
-                Printer.print();
+                Printer.print(true);
                 return level;
             } catch (IllegalArgumentException e) {
                 clearConsole();
@@ -183,10 +205,10 @@ public class Utils {
                             "2 - Mestrado\n" +
                             "3 - Doutorado\n");
             try {
-                int id = readInt("");
+                int id = readInt("", false);
                 Education education = Education.fromId(id);
                 Printer.printList.add(message + education.toString());
-                Printer.print();
+                Printer.print(true);
                 return education;
             } catch (IllegalArgumentException e) {
                 clearConsole();
