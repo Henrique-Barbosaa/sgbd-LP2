@@ -102,20 +102,20 @@ public class Menu {
     }
 
     public void calculateWage() {
-        Long registration = Utils.readLong("Digite a matrícula do funcionário que deseja excluir: \n", false);
+        Long registration = Utils.readLong("Digite a matrícula do funcionário que calcular o salário: \n", false);
         for (int i = 0; i < personsList.size(); i++) {
             Person p = personsList.get(i);
             if(p instanceof Professor){
                 Professor prof = (Professor) p;
                 if(prof.getRegistration().equals(registration)){
-                    Printer.printList.add("Professsor(a) de matrícula " + registration + " tem o salário de R$" + prof.calculateWage() + "\n");
+                    prof.calculateWage();
                     return;
                 }
             }
             if(p instanceof AdminTechnician){
                 AdminTechnician tec = (AdminTechnician) p;
                 if(tec.getRegistration().equals(registration)){
-                    Printer.printList.add("Técnico(a) de matrícula " + registration + " tem o salário de R$" +  String.format("%.2f", tec.calculateWage()) + "\n");
+                    tec.calculateWage();
                     return;
                 }
             }
@@ -206,39 +206,41 @@ public class Menu {
     }
 
     public void printAllProfessors() {
-        if(personsList.isEmpty()) {
-            Printer.printList.add("Não existe nenhum professor cadastrado no sistema!");
-            return;
-        };
-        Printer.printList.add("------------------------------");
+        boolean first = true;
         for (Person person : personsList) {
             if(person instanceof Professor){
+                if(first){
+                    Printer.printList.add("------------------------------");
+                    first = false;
+                }
                 Professor prof = (Professor) person;
                 Printer.printList.add("Nome: " + prof.getName());
                 Printer.printList.add("Disciplinas ministradas: ");
                 for (int i = 0; i < prof.getSubjects().size(); i++) {
                     Printer.printList.add("  - " + prof.getSubjects().get(i));
                 }
-                Printer.printList.add("Matricula: " + prof.getRegistration());
+                Printer.printList.add("Matrícula: " + prof.getRegistration());
                 Printer.printList.add("------------------------------");
             }
         }
+        if (first) Printer.printList.add("Não há nenhum professor cadastrado no sistema no momento.");
     }
 
     public void printAllAdminTechnician() {
-        if(personsList.isEmpty()) {
-            Printer.printList.add("Não existe nenhum técnico administrativo cadastrado no sistema!");
-            return;
-        };
-        Printer.printList.add("------------------------------");
+        boolean first = true;
         for (Person person : personsList) {
             if(person instanceof AdminTechnician){
+                if(first){
+                    Printer.printList.add("------------------------------");
+                    first = false;
+                }
                 AdminTechnician tec = (AdminTechnician) person;
                 Printer.printList.add("Nome: " + tec.getName());
-                Printer.printList.add("Matricula: " + tec.getRegistration());
+                Printer.printList.add("Matrícula: " + tec.getRegistration());
                 Printer.printList.add("------------------------------");
             }
         }
+        if (first) Printer.printList.add("Não há nenhum professor cadastrado no sistema no momento.");
     }
 
     public void deleteProfessor() {

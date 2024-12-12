@@ -15,7 +15,6 @@ public class PersonsDB {
             @SuppressWarnings("unchecked")
             ArrayList<Person> list = (ArrayList<Person>) ois.readObject();
             PersonsDB.persons = list;
-            System.out.println("ArrayList<Person> carregado: " + list);
         } catch (Exception e) {
             PersonsDB.persons = new ArrayList<>();
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/bin/persons.bin"))) {
@@ -42,9 +41,9 @@ public class PersonsDB {
         return false;
     }
 
-    public static boolean existByRegistration(Long registation){
+    public static boolean existByRegistration(Long registration){
         for (Person person : persons) {
-            if(person.getRegistration().equals(registation)){
+            if(person.getRegistration().equals(registration)){
                 return true;
             }
         }

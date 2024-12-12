@@ -3,6 +3,7 @@ package models;
 import models.enums.Education;
 import models.enums.Gender;
 import models.enums.Level;
+import utils.Printer;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,16 +47,23 @@ public class Professor extends Person implements Employee{
 
     @Override
     public Double calculateWage() {
+        Printer.printList.add("Calculo do professor " + this.getName() + " de matrícula " + this.getRegistration() + ".\n");
+        Printer.printList.add("Salário base dos professores: R$4000,00");
         Double baseWage = 4000.0;
-        Double educationBonus = this.professorEducation.getId() * 25.0;
 
+        Double educationBonus = this.getProfessorEducation().getId() * 25.0;
         Double wage = baseWage + ((baseWage * educationBonus)/ 100.0);
+        Printer.printList.add("Salário após a bonificação por " + this.getProfessorEducation().toString().toLowerCase() + ": R$" + String.format("%.2f", wage) + "  (+" + String.format("%.2f", educationBonus) + "%)");
+
         if(this.getProfessorLevel().getId() > 1) {
             for (int i = 1; i < this.getProfessorLevel().getId(); i++) {
                 wage = wage + ((wage * 5)/ 100.0);
             }
         }
+        Printer.printList.add("Salário após a bonificação por nível " + this.getProfessorLevel() + ": R$" + String.format("%.2f", wage));
+
         this.wage = wage;
+        Printer.printList.add("\nSalário total do professor: R$" + String.format("%.2f", wage));
         return wage;
     }
 

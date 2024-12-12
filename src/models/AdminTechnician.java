@@ -3,6 +3,7 @@ package models;
 import models.enums.Education;
 import models.enums.Gender;
 import models.enums.Level;
+import utils.Printer;
 
 import java.time.LocalDate;
 
@@ -48,18 +49,31 @@ public class AdminTechnician extends Person implements Employee{
 
     @Override
     public Double calculateWage() {
+        Printer.printList.add("Calculo do técnico " + this.getName() + " de matrícula " + this.getRegistration() + ".\n");
+        Printer.printList.add("Salário base dos técnicos administrativos: R$2500,00");
         Double baseWage = 2500.0;
-        Double educationBonus = this.technicianEducation.getId() * 25.0;
 
+        Double educationBonus = this.technicianEducation.getId() * 25.0;
         Double wage = baseWage + ((baseWage * educationBonus)/ 100.0);
-        if(this.hazardousCondition) wage = wage + ((baseWage * 50.0)/ 100.0);
-        if(this.benefitedRole) wage = wage + ((baseWage * 50.0)/ 100.0);
+        Printer.printList.add("Salário após a bonificação por " + this.getTechnicianEducation().toString().toLowerCase() + ": R$" + String.format("%.2f", wage) + "  (+" + String.format("%.2f", educationBonus) + "%)");
+
         if(this.getTechnicianLevel().getId() > 1) {
             for (int i = 1; i < this.getTechnicianLevel().getId(); i++) {
                 wage = wage + ((wage * 3)/ 100.0);
             }
         }
+        Printer.printList.add("Salário após a bonificação por nível " + this.getTechnicianLevel() + ": R$" + String.format("%.2f", wage));
+
+        if(this.hazardousCondition){
+            wage = wage + ((baseWage * 50.0)/ 100.0);
+            Printer.printList.add("Salário após a bonificação por insalubridade: R$" + String.format("%.2f", wage));
+        }
+        if(this.benefitedRole) {
+            wage = wage + ((baseWage * 50.0)/ 100.0);
+            Printer.printList.add("Salário após a bonificação por exercer função gratificada: R$" + String.format("%.2f", wage));
+        }
         this.wage = wage;
+        Printer.printList.add("\nSalário total do técnico: R$" + String.format("%.2f", wage));
         return wage;
     }
 
