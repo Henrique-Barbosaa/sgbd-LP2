@@ -91,7 +91,7 @@ public class Menu {
                     calculateWage();
                     break;
                 case 10:
-                    System.out.println("\nFechando sistema...");
+                    System.out.println("\nFechando programa...");
                     running = false;
                     break;
                 default:
