@@ -48,7 +48,19 @@ public class AdminTechnician extends Person implements Employee{
 
     @Override
     public Double calculateWage() {
-        return null;
+        Double baseWage = 2500.0;
+        Double educationBonus = this.technicianEducation.getId() * 25.0;
+
+        Double wage = baseWage + ((baseWage * educationBonus)/ 100.0);
+        if(this.hazardousCondition) wage = wage + ((baseWage * 50.0)/ 100.0);
+        if(this.benefitedRole) wage = wage + ((baseWage * 50.0)/ 100.0);
+        if(this.getTechnicianLevel().getId() > 1) {
+            for (int i = 1; i < this.getTechnicianLevel().getId(); i++) {
+                wage = wage + ((wage * 3)/ 100.0);
+            }
+        }
+        this.wage = wage;
+        return wage;
     }
 
     public Level getTechnicianLevel() {

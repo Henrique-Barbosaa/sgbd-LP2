@@ -46,7 +46,17 @@ public class Professor extends Person implements Employee{
 
     @Override
     public Double calculateWage() {
-        return null;
+        Double baseWage = 4000.0;
+        Double educationBonus = this.professorEducation.getId() * 25.0;
+
+        Double wage = baseWage + ((baseWage * educationBonus)/ 100.0);
+        if(this.getProfessorLevel().getId() > 1) {
+            for (int i = 1; i < this.getProfessorLevel().getId(); i++) {
+                wage = wage + ((wage * 5)/ 100.0);
+            }
+        }
+        this.wage = wage;
+        return wage;
     }
 
     public Level getProfessorLevel() {

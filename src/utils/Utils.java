@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import models.Address;
+import models.PersonsDB;
 import models.enums.Level;
 import models.enums.Education;
 import models.enums.Gender;
@@ -24,8 +25,8 @@ public class Utils {
                 scanner.nextLine();
                 break;
             } else {
-                //clearConsole();
-                System.out.println("Valor inválido. Tente novamente.");
+                Printer.print(true);
+                System.out.println("Valor inválido. Tente novamente.\n");
                 scanner.next();
             }
         }
@@ -36,19 +37,35 @@ public class Utils {
         return value;
     }
 
-    public static long readLong(String message){
+    public static long readLong(String message, boolean addPrintList){
         long value;
         while (true) {
             System.out.print(message);
             if (scanner.hasNextLong()) {
                 value = scanner.nextLong();
-                Printer.printList.add(message + value);
+                if(addPrintList) Printer.printList.add(message + value);
                 scanner.nextLine();
                 break;
             } else {
-                clearConsole();
-                System.out.println("Valor inválido. Tente novamente.");
+                Printer.print(true);
+                System.out.println("Valor inválido. Tente novamente.\n");
                 scanner.next();
+            }
+        }
+        Printer.print(true);
+        return value;
+    }
+
+    public static long readRegistration(String message){
+        long value;
+        while (true) {
+            value = readLong(message, false);
+            if (!PersonsDB.existByRegistration(value)) {
+                Printer.printList.add(message + value);
+                break;
+            } else {
+                Printer.print(true);
+                System.out.println("Essa matrícula já existe. Tente novamente.\n");
             }
         }
         Printer.print(true);
@@ -65,8 +82,8 @@ public class Utils {
                 scanner.nextLine();
                 break;
             } else {
-                clearConsole();
-                System.out.println("Valor inválido. Tente novamente.");
+                Printer.print(true);
+                System.out.println("Valor inválido. Tente novamente.\n");
                 scanner.next();
             }
         }
@@ -88,7 +105,7 @@ public class Utils {
         String cpf;
         while (true) {
             cpf = readString("CPF: ", false);
-            if(cpf.length() == 11 && cpf.matches("\\d+")){
+            if(cpf.length() == 11 && cpf.matches("\\d+") && !PersonsDB.existByCPF(cpf)){
                 Printer.printList.add("CPF: " + cpf.substring(0, 3) + "." +
                                                 cpf.substring(3, 6) + "." +
                                                 cpf.substring(6, 9) + "-" +
@@ -103,19 +120,18 @@ public class Utils {
     }
 
     public static Gender readGender(String message){
+        String question = message + "\nDigite o número correspondente ao genêro do funcionário:\n" + 
+                            "1 - Masculino \n2 - Feminino\n3 - Outro\n";
         while (true) {
-            System.out.println(message);
-            System.out.println("Digite o número correspondente ao genêro do funcionário:");
-            System.out.print("1 - Masculino \n2 - Feminino\n3 - Outro\n");
             try {
-                int id = readInt("", false);
+                int id = readInt(question, false);
                 Gender gender = Gender.fromId(id);
                 Printer.printList.add(message + gender.toString());
                 Printer.print(true);
                 return gender;
             } catch (IllegalArgumentException e) {
-                clearConsole();
-                System.out.println("Valor inválido. Tente novamente.");
+                Printer.print(true);
+                System.out.println("Valor inválido. Tente novamente.\n");
             }
         }
     }
@@ -131,7 +147,8 @@ public class Utils {
                 Printer.print(true);
                 return date;
             } catch (DateTimeParseException e) {
-                System.out.println("Data inválida. Por favor, tente novamente.");
+                Printer.print(true);
+                System.out.println("Data inválida. Por favor, tente novamente.\n");
             }
         }
     }
@@ -152,10 +169,13 @@ public class Utils {
             System.out.print("1 - Sim\n2 - Não\n");
 
             value = readInt("", false);
-            if(value == 2) break;
+            if(value == 2){
+                Printer.print(true);
+                break;
+            }
             if(value != 1){
                 Printer.print(true);
-                System.out.println("\nValor inválido. Tente novamente");
+                System.out.println("Valor inválido. Tente novamente\n");
             }
         }
         return subjects;
@@ -173,46 +193,61 @@ public class Utils {
     }
 
     public static Level readLevel(String message) {   
-        while (true) {
-            System.out.println(message);
-            System.out.println("Digite o número correspondente ao genêro do funcionário:");
-            System.out.print("1 - I \n" + 
+        String question = message + "\nDigite o número correspondente ao nível do funcionário:\n" + 
+                            "1 - I \n" + 
                             "2 - II\n" +
                             "3 - III\n" + 
                             "4 - IV\n" +
                             "5 - V\n" +
                             "6 - VI\n" +
                             "7 - VII\n" +
-                            "8 - VIII\n");
+                            "8 - VIII\n";
+        while (true) {
             try {
-                int id = readInt("", false);
+                int id = readInt(question, false);
                 Level level = Level.fromId(id);
                 Printer.printList.add(message + level.toString());
                 Printer.print(true);
                 return level;
             } catch (IllegalArgumentException e) {
-                clearConsole();
-                System.out.println("Valor inválido. Tente novamente.");
+                Printer.print(true);
+                System.out.println("Valor inválido. Tente novamente.\n");
             }
         }
     }
 
-    public static Education readEducation(String message) {   
+    public static boolean readBoolean(String message, String printListMessage) {
         while (true) {
-            System.out.println(message);
-            System.out.println("Digite o número correspondente ao genêro do funcionário:");
-            System.out.print("1 - Especialização\n" + 
-                            "2 - Mestrado\n" +
-                            "3 - Doutorado\n");
+            int boolNumber = readInt(message, false);
+            if(boolNumber == 1){
+                Printer.printList.add(printListMessage + "Sim");
+                Printer.print(true);
+                return true;
+            }
+            if (boolNumber == 2){
+                Printer.printList.add(printListMessage + "Não");
+                Printer.print(true);
+                return false;
+            }
+
+            Printer.print(true);
+            System.out.println("Opção inválida. Tente novamente.");
+        }
+    }
+
+    public static Education readEducation(String message) {   
+        String question = message + "\nDigite o número correspondente a formação do funcionário:\n" + 
+                            "1 - Especialização \n2 - Mestrado\n3 - Doutorado\n";
+        while (true) {
             try {
-                int id = readInt("", false);
+                int id = readInt(question, false);
                 Education education = Education.fromId(id);
                 Printer.printList.add(message + education.toString());
                 Printer.print(true);
                 return education;
             } catch (IllegalArgumentException e) {
-                clearConsole();
-                System.out.println("Valor inválido. Tente novamente.");
+                Printer.print(true);
+                System.out.println("Valor inválido. Tente novamente.\n");
             }
         }
     }
