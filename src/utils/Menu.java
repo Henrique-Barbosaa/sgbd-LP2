@@ -12,6 +12,7 @@ import models.enums.Level;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -334,8 +335,11 @@ public class Menu {
 
     // Salva o ArrayList no arquivo binário quando o programa for fechado pelo menu.
     public void saveWhenCloseApp() {
+        String basePath = System.getProperty("user.dir");
+        String filePath = Paths.get(basePath, "bin", "persons.bin").toString();
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/bin/persons.bin"))) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
                 oos.writeObject(personsList);
                 System.out.println("Arquivo binário salvo com sucesso!\n");
             } catch (IOException e) {

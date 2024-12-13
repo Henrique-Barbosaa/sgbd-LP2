@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class PersonsDB {
@@ -11,13 +12,16 @@ public class PersonsDB {
     private static ArrayList<Person> persons;
 
     private PersonsDB() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/bin/persons.bin"))) {
+        String basePath = System.getProperty("user.dir");
+        String filePath = Paths.get(basePath, "bin", "persons.bin").toString();
+        
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             @SuppressWarnings("unchecked")
             ArrayList<Person> list = (ArrayList<Person>) ois.readObject();
             PersonsDB.persons = list;
         } catch (Exception e) {
             PersonsDB.persons = new ArrayList<>();
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/bin/persons.bin"))) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
                 oos.writeObject(PersonsDB.persons);
             } catch (Exception ex) {
                 ex.printStackTrace();
