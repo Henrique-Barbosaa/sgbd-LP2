@@ -19,6 +19,7 @@ Clone ou baixe este repositório para o seu computador.
    cd C:\caminho\para\SGBD_LP2
 
 3. Execute o script Run.bat para executar o código.
+4. Caso prefira, apenas abra a pasta do projeto e clique duas vezes no Run.bat para executar.
 
 ### 3. Executando no Linux
 
