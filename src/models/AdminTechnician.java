@@ -66,11 +66,11 @@ public class AdminTechnician extends Person implements Employee{
 
         if(this.hazardousCondition){
             wage = wage + ((baseWage * 50.0)/ 100.0);
-            Printer.printList.add("Salário após a bonificação por insalubridade: R$" + String.format("%.2f", wage));
+            Printer.printList.add("Salário após a bonificação por insalubridade: R$" + String.format("%.2f", wage) + "  (+" + String.format("%.2f", 50.0) + "% do salário base)");
         }
         if(this.benefitedRole) {
             wage = wage + ((baseWage * 50.0)/ 100.0);
-            Printer.printList.add("Salário após a bonificação por exercer função gratificada: R$" + String.format("%.2f", wage));
+            Printer.printList.add("Salário após a bonificação por exercer função gratificada: R$" + String.format("%.2f", wage) + "  (+" + String.format("%.2f", 50.0) + "% do salário base)");
         }
         this.wage = wage;
         Printer.printList.add("\nSalário total do técnico: R$" + String.format("%.2f", wage));

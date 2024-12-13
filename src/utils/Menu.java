@@ -236,6 +236,8 @@ public class Menu {
                 }
                 AdminTechnician tec = (AdminTechnician) person;
                 Printer.printList.add("Nome: " + tec.getName());
+                Printer.printList.add("Insalubridade: " + (tec.getHazardousCondition() ? "Sim" : "Não"));
+                Printer.printList.add("Função Gratificada: " + (tec.getBenefitedRole() ? "Sim" : "Não"));
                 Printer.printList.add("Matrícula: " + tec.getRegistration());
                 Printer.printList.add("------------------------------");
             }

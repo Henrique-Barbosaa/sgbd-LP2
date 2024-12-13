@@ -11,5 +11,6 @@ public class Printer {
         for (String string : printList) {
             System.out.println(string);
         }
+        System.out.println("\n");
     }
 }
